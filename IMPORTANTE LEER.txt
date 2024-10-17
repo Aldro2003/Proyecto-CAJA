@@ -1,4 +1,0 @@
-Para acceder a la página del proyecto al completo y observar todo correctamente, de debe entrar en este enlace:
-https://alvaro5756.github.io/Hackaton/index.html
-El resto de información en este repositorio son los códigos empleados, sus pruebas sueltas y el archivo
-con toda la información del proyecto recogida.
