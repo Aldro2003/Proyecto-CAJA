@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto de C.A.J.A.</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            position: relative;
+            /* Añadido para el posicionamiento del botón */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        pre {
+            background-color: #eee;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        .header-container {
+            width: 100%;
+            background-color: rgba(52, 144, 219, 0.3);
+            padding: 20px;
+            text-align: left;
+        }
+
+        h1 {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 50px;
+            color: white;
+            margin: 0;
+        }
+
+        /* Estilo para el botón de accesibilidad */
+        #accessibilityBtn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            position: absolute;
+            bottom: 20px;
+            /* Espacio desde el fondo */
+            right: 20px;
+            /* Espacio desde la derecha */
+        }
+
+        /* Estilo para el menú desplegable */
+        .dropdown {
+            display: none;
+            position: absolute;
+            bottom: 60px;
+            /* Espacio sobre el botón de accesibilidad */
+            right: 20px;
+            /* Alinear a la derecha */
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .dropdown button {
+            display: block;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 5px 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header-container">
+        <h1>Lista de todos los embalses</h1>
+    </div>
+    <div class="homepage-link">
+        <a href="index.html">Inicio</a>
+    </div>
+    <h2>Datos:</h2>
+    <table id="dataTable" style="display:none;">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Embalse</th>
+                <th>X</th>
+                <th>Y</th>
+                <th>Demarcación</th>
+                <th>Cauce</th>
+                <th>Provincia</th>
+                <th>CCAA</th>
+                <th>Tipo</th>
+                <th>Informe</th>
+            </tr>
+        </thead>
+        <tbody id="dataDisplay"></tbody>
+    </table>
+
+    <script>
+        // Función para cargar los datos al entrar en la página
+        const loadData = () => {
+            const username = 'CAJA'; // reemplaza con tu usuario
+            const password = 'MEREngue!!!c4j0n3r0_'; // reemplaza con tu contraseña
+            const headers = new Headers();
+            headers.append('Authorization', 'Basic ' + btoa(username + ':' + password));
+
+            fetch('https://g1573d51ff99280-ziog604abobz9lyd.adb.eu-madrid-1.oraclecloudapps.com/ords/caja/embalses_listado/?limit=400', {
+                method: 'GET',
+                headers: headers
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la red: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Limpiar el contenido previo
+                    const tbody = document.getElementById('dataDisplay');
+                    tbody.innerHTML = '';
+
+                    // Procesar y mostrar los datos en la tabla
+                    data.items.forEach(item => { // Suponiendo que los datos vienen en un array llamado "items"
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                        <td>${item.codigo}</td>
+                        <td>${item.nombre}</td>
+                        <td>${item.embalse}</td>
+                        <td>${item.x}</td>
+                        <td>${item.y}</td>
+                        <td>${item.demarc}</td>
+                        <td>${item.cauce}</td>
+                        <td>${item.provincia}</td>
+                        <td>${item.ccaa}</td>
+                        <td>${item.tipo}</td>
+                        <td><a href="${item.informe}" target="_blank">Ver Informe</a></td>
+                    `;
+                        tbody.appendChild(row);
+                    });
+
+                    // Mostrar la tabla
+                    document.getElementById('dataTable').style.display = 'table';
+                })
+                .catch(error => {
+                    console.error('Error en la solicitud:', error);
+                    const tbody = document.getElementById('dataDisplay');
+                    tbody.innerHTML = '<tr><td colspan="11">Error: ' + error.message + '</td></tr>';
+                    document.getElementById('dataTable').style.display = 'table';
+                });
+        };
+
+        // Cargar los datos al entrar en la página
+        window.onload = loadData;
+    </script>
+
+    <!-- Botón de accesibilidad -->
+    <div style="position: relative;">
+        <button id="accessibilityBtn">Accesibilidad</button>
+        <div class="dropdown" id="accessibilityMenu">
+            <button id="readTextBtn">Leer texto</button>
+            <button id="toggleFontBtn">Formato para disléxicos</button>
+        </div>
+    </div>
+
+    <script>
+        let userLocation = {}; // Variable para almacenar las coordenadas
+        let isComicSans = false; // Variable para controlar el estado de la fuente
+
+        // Función para leer todo el texto de la página
+        document.getElementById('readTextBtn').onclick = function () {
+            const textToRead = [
+                document.querySelector('h1').innerText,
+                document.querySelector('a').innerText,
+            ];
+
+            let index = 0;
+
+            function speakNext() {
+                if (index < textToRead.length) {
+                    const utterance = new SpeechSynthesisUtterance(textToRead[index]);
+                    speechSynthesis.speak(utterance);
+                    index++;
+                    utterance.onend = speakNext; // Leer el siguiente texto al finalizar
+                }
+            }
+
+            speakNext();
+        }
+
+        // Función para alternar entre Comic Sans y la fuente normal
+        document.getElementById('toggleFontBtn').onclick = function () {
+            isComicSans = !isComicSans; // Cambiar el estado de la fuente
+            document.body.style.fontFamily = isComicSans ? 'Comic Sans MS' : 'Arial, sans-serif'; // Cambiar la fuente
+        }
+
+        // Mostrar/ocultar el menú de accesibilidad
+        document.getElementById('accessibilityBtn').onclick = function () {
+            const menu = document.getElementById('accessibilityMenu');
+            menu.style.display = menu.style.display === 'none' || menu.style.display === '' ? 'block' : 'none';
+        }
+    </script>
+</body>
+
+</html>

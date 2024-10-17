@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre el grupo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('source/embalse.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .header-container {
+            width: 100%;
+            background-color: rgba(52, 144, 219, 0.3);
+            padding: 20px;
+            text-align: left;
+        }
+
+        h1 {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 50px;
+            color: white;
+            margin: 0;
+        }
+
+        .homepage-link {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        .galeria {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .columna {
+            display: flex;
+            flex-direction: column;
+            width: 45%;
+        }
+
+        .imagen-container {
+            display: flex;
+            align-items: center;
+            margin: 20px;
+        }
+
+        img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-right: 20px;
+        }
+
+        .comentario {
+            max-width: 500px;
+        }
+
+        /* Estilo para los botones */
+        #accessibilityBtn {
+            display: block;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            /* Posición del botón de accesibilidad */
+        }
+
+        /* Estilo para el menú desplegable */
+        .dropdown {
+            display: none;
+            position: absolute;
+            bottom: 60px;
+            /* Espacio sobre el botón de accesibilidad */
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .dropdown button {
+            display: block;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 5px 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header-container">
+        <h1>Sobre nosotros</h1>
+    </div>
+    <div class="homepage-link">
+        <a href="index.html">Inicio</a>
+    </div>
+
+    <div class="galeria">
+        <div class="columna">
+            <div class="imagen-container">
+                <img src="source/cristina.jpg" alt="Descripción de la imagen 1">
+                <div class="comentario">Alumna de tercer año de Ingeniería Informática.<br><br>
+                    Cristina Teruel Lorenzetti
+                </div>
+            </div>
+            <div class="imagen-container">
+                <img src="source/alvaro.jpg" alt="Descripción de la imagen 2">
+                <div class="comentario">Alumno de segundo año de Ingeniería de la Salud.<br><br>
+                    Álvaro José Vargas Carrillo
+                </div>
+            </div>
+        </div>
+        <div class="columna">
+            <div class="imagen-container">
+                <img src="source/alejandro.jpg" alt="Descripción de la imagen 3">
+                <div class="comentario">Alumno de segundo año de Ingeniería Informática.<br><br>
+                    Juan Alejandro Vargas Carrillo
+                </div>
+            </div>
+            <div class="imagen-container">
+                <img src="source/josete.jpg" alt="Descripción de la imagen 4">
+                <div class="comentario">Alumno de segundo año de Ingeniería de Software.<br><br>
+                    José María Montañez Mora
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón de accesibilidad -->
+    <button id="accessibilityBtn">Accesibilidad</button>
+
+    <!-- Menú desplegable -->
+    <div class="dropdown" id="accessibilityMenu">
+        <button id="toggleFontBtn">Formato para diléxicos</button>
+        <button id="readTextBtn">Leer texto</button>
+    </div>
+
+    <script>
+        let isComicSans = false; // Variable para controlar el estado de la fuente
+
+        // Función para mostrar/ocultar el menú desplegable
+        document.getElementById('accessibilityBtn').onclick = function () {
+            const menu = document.getElementById('accessibilityMenu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        };
+
+        // Función para cambiar la fuente entre Arial y Comic Sans
+        document.getElementById('toggleFontBtn').onclick = function () {
+            isComicSans = !isComicSans; // Alternar el estado
+            document.body.style.fontFamily = isComicSans ? 'Comic Sans MS' : 'Arial, sans-serif';
+            document.body.style.fontSize = isComicSans ? '18px' : '16px'; // Cambiar tamaño de fuente
+            document.body.style.fontWeight = isComicSans ? 'bold' : 'normal'; // Cambiar a negrita
+            this.innerText = isComicSans ? 'Formato normal' : 'Formato para diléxicos'; // Cambiar texto del botón
+        };
+
+        // Función para leer todo el texto de la página
+        document.getElementById('readTextBtn').onclick = function () {
+            const textToRead = [
+                document.querySelector('h1').innerText,
+                document.querySelector('a').innerText,
+                ...Array.from(document.querySelectorAll('.comentario')).map(comentario => comentario.innerText)
+            ];
+
+            let index = 0;
+
+            function speakNext() {
+                if (index < textToRead.length) {
+                    const utterance = new SpeechSynthesisUtterance(textToRead[index]);
+                    speechSynthesis.speak(utterance);
+                    index++;
+
+                    utterance.onend = function () {
+                        setTimeout(speakNext, 500);
+                    };
+                }
+            }
+
+            speakNext();
+        }
+    </script>
+</body>
+
+</html>

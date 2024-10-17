@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto C.A.J.A</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('source/embalse.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .header {
+            width: 100%;
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        h1 {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 50px;
+            text-align: left;
+            background-color: rgba(52, 144, 219, 0.3);
+            color: white;
+            padding: 20px;
+            margin: 0;
+        }
+
+        /* Contenedor para el mapa y los controles */
+        #mapContainer {
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Fondo blanco semitransparente */
+            border-radius: 10px;
+            /* Esquinas redondeadas */
+            padding: 20px;
+            /* Espaciado interno */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            /* Sombra para dar profundidad */
+            margin: 20px 0;
+            /* Margen superior e inferior */
+            text-align: center;
+            /* Centrar el contenido */
+        }
+
+        iframe {
+            display: block;
+            width: 600px;
+            height: 450px;
+            border: 0;
+        }
+
+        /* Agrupar los botones en un contenedor */
+        #locationButtons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+            /* Ajustar el margen superior e inferior */
+        }
+
+        #locationBtn,
+        #manualLocationBtn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Estilo de fondo */
+            color: white;
+            /* Color del texto */
+            border: none;
+            /* Sin borde */
+            border-radius: 5px;
+            /* Esquinas redondeadas */
+            margin: 5px 0;
+            /* Margen entre botones */
+            transition: background-color 0.3s;
+            /* Efecto de transición */
+        }
+
+        #locationBtn:hover,
+        #manualLocationBtn:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+            /* Cambio de fondo al pasar el mouse */
+        }
+
+        #manualCoordinates {
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        input {
+            padding: 5px;
+            font-size: 16px;
+            width: 120px;
+        }
+
+        #locationInfo,
+        #manualLocationInfo {
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Estilo para el botón de accesibilidad */
+        #accessibilityBtn {
+            display: block;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            position: absolute;
+            bottom: 20px;
+            left: 600px;
+            /* Posición del botón de accesibilidad */
+        }
+
+        /* Estilo para el menú desplegable */
+        .dropdown {
+            display: none;
+            position: absolute;
+            bottom: 60px;
+            /* Espacio sobre el botón de accesibilidad */
+            left: 600px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .dropdown button {
+            display: block;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 5px 0;
+            width: 100%;
+        }
+
+        /* Asegura que el contenido del body permita el desplazamiento */
+        html,
+        body {
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>Embalses a nuestro alrededor</h1>
+        <a href="aboutus.html">Sobre nosotros</a>
+        <a href="listaembalses.html">Lista de todos los embalses</a>
+    </div>
+
+    <!-- Contenedor para el mapa y los controles -->
+    <div id="mapContainer">
+        <div id="manualCoordinates">
+            <input type="text" id="latitudeInput" placeholder="Latitud" />
+            <input type="text" id="longitudeInput" placeholder="Longitud" />
+        </div>
+
+        <!-- Contenedor para los botones -->
+        <div id="locationButtons">
+            <button id="manualLocationBtn">Usar coordenadas manuales</button>
+            <button id="locationBtn">Utilizar ubicación actual</button>
+        </div>
+
+        <iframe id="map"
+            src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d413432.3549906899!2d-4.892867352563076!3d36.75516524899867!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sembalses%20malaga!5e1!3m2!1ses!2ses!4v1729158633985!5m2!1ses!2ses"
+            width="600" height="450" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+        <div id="locationInfo"></div>
+        <div id="manualLocationInfo"></div>
+    </div>
+
+    <!-- Botón de accesibilidad -->
+    <div style="position: relative;">
+        <button id="accessibilityBtn">Accesibilidad</button>
+        <div class="dropdown" id="accessibilityMenu">
+            <button id="readTextBtn">Leer texto</button>
+            <button id="toggleFontBtn">Formato para disléxicos</button>
+        </div>
+    </div>
+
+    <script>
+        let userLocation = {}; // Variable para almacenar las coordenadas
+        let isComicSans = false; // Variable para controlar el estado de la fuente
+
+        document.getElementById('locationBtn').onclick = function () {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    // Redirigir a la nueva página con parámetros de latitud y longitud
+                    window.location.href = `reservoirs.html?lat=${latitude}&long=${longitude}`;
+                }, function (error) {
+                    console.error("Error al obtener la ubicación: " + error.message);
+                });
+            } else {
+                console.log("La geolocalización no es compatible con este navegador.");
+            }
+        }
+
+        document.getElementById('manualLocationBtn').onclick = function () {
+            const latitude = parseFloat(document.getElementById('latitudeInput').value);
+            const longitude = parseFloat(document.getElementById('longitudeInput').value);
+
+            if (isNaN(latitude) || isNaN(longitude)) {
+                document.getElementById('manualLocationInfo').innerText = 'Por favor, introduce coordenadas válidas.';
+                return;
+            }
+
+            // Redirigir a la nueva página con parámetros de latitud y longitud
+            window.location.href = `reservoirs.html?lat=${latitude}&long=${longitude}`;
+        }
+
+        // Función para leer todo el texto de la página
+        document.getElementById('readTextBtn').onclick = function () {
+            const textToRead = [
+                document.querySelector('h1').innerText,
+                document.querySelector('a').innerText,
+                document.getElementById('locationInfo').innerText,
+                document.getElementById('manualLocationInfo').innerText
+            ];
+
+            let index = 0;
+
+            function speakNext() {
+                if (index < textToRead.length) {
+                    const utterance = new SpeechSynthesisUtterance(textToRead[index]);
+                    speechSynthesis.speak(utterance);
+                    index++;
+                    utterance.onend = speakNext; // Leer el siguiente texto al finalizar
+                }
+            }
+
+            speakNext();
+        }
+
+        // Función para alternar entre Comic Sans y la fuente normal
+        document.getElementById('toggleFontBtn').onclick = function () {
+            isComicSans = !isComicSans; // Cambiar el estado de la fuente
+            document.body.style.fontFamily = isComicSans ? 'Comic Sans MS' : 'Arial, sans-serif'; // Cambiar la fuente
+        }
+
+        // Mostrar/ocultar el menú de accesibilidad
+        document.getElementById('accessibilityBtn').onclick = function () {
+            const menu = document.getElementById('accessibilityMenu');
+            menu.style.display = menu.style.display === 'none' || menu.style.display === '' ? 'block' : 'none';
+        }
+    </script>
+</body>
+
+</html>
